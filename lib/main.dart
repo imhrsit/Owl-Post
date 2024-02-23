@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:owl_post/pages/home_page.dart';
 
 void main() {
-  runApp(new MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  HomePage(),
+      home: const HomePage(),
       theme: ThemeData(
         fontFamily: 'SixtyFour',
         brightness: Brightness.dark,

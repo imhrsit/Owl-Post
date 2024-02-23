@@ -1,23 +1,24 @@
 import 'dart:developer';
-
+//import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:owl_post/models/chat_message_model.dart';
 import 'package:owl_post/utils/const.dart';
 
 class ChatRepo {
-  static ChatTextGenerationRepo(List<ChatMessageModel> previousMessages) async {
+  static Future<String> chatTextGenerationRepo(
+      List<ChatMessageModel> previousMessages) async {
     try {
-      Dio dio = Dio();
 
+      Dio dio = Dio();
       final response = await dio.post(
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${api_key}",
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${api_key}',
           data: {
             "contents": previousMessages.map((e) => e.toMap()).toList(),
             "generationConfig": {
-              "temperature": 0.9,
+              "temperature": 1,
               "topK": 1,
               "topP": 1,
-              "maxOutputTokens": 2048,
+              "maxOutputTokens": 2000,
               "stopSequences": []
             },
             "safetySettings": [
@@ -39,9 +40,16 @@ class ChatRepo {
               }
             ]
           });
-      log(response.toString());
+
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        return response
+            .data['candidates'].first['content']['parts'].first['text'];
+      }
+
+      return '';
     } catch (e) {
       log(e.toString());
+      return '';
     }
   }
 }
